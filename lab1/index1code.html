@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIT-AP University Registration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS for Styling */
+        :root {
+            --vit-red: #D2262E; /* VIT Red */
+            --vit-blue: #2C3E50; /* Dark Navy/Blue */
+            --light-grey: #f4f4f4;
+            --dark-text: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--light-grey);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .main-wrapper {
+            display: flex;
+            max-width: 1200px;
+            width: 100%;
+            gap: 30px;
+        }
+
+        /* --- University Info Section (Left) --- */
+        .info-section {
+            flex: 1;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--vit-blue) 0%, #4A76A3 100%);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            animation: slideInLeft 1s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .info-section h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--vit-red);
+            padding-bottom: 10px;
+        }
+
+        .info-section p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .login-buttons {
+            margin-top: 30px;
+        }
+
+        .login-buttons h3 {
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        .login-buttons button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .login-buttons .btn-student {
+            background-color: var(--vit-red);
+            color: white;
+        }
+
+        .login-buttons .btn-faculty {
+            background-color: white;
+            color: var(--vit-blue);
+            border: 2px solid var(--vit-red);
+        }
+
+        .login-buttons button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+        
+        /* --- Registration Form Section (Right) --- */
+        .registration-section {
+            flex: 1.5; 
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: var(--vit-blue);
+            font-size: 1.8em;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #777;
+            font-size: 0.9em;
+        }
+
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--dark-text); }
+        .form-group input { 
+            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; 
+            font-size: 1em; transition: border-color 0.3s, box-shadow 0.3s; 
+        }
+        .form-group input:focus { 
+            border-color: var(--vit-red); box-shadow: 0 0 5px rgba(210, 38, 46, 0.5); outline: none; 
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--vit-red);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            margin-top: 10px;
+        }
+
+        .btn-register:hover { background-color: #a81c22; transform: translateY(-2px); }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .main-wrapper {
+                flex-direction: column;
+            }
+            .info-section {
+                order: 2; 
+            }
+            .registration-section {
+                order: 1;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <div class="info-section">
+            <h2>Welcome to VIT-AP</h2>
+            <p>
+                Vellore Institute of Technology - Andhra Pradesh (VIT-AP) University is committed to global excellence in higher education. Our focus is on research, innovation, and industry-relevant curriculum, ensuring students are future-ready.
+            </p>
+            <p>
+                We offer a wide range of programs across engineering, management, and sciences, guided by a team of highly-qualified international faculty. Join us to build a transformative career!
+            </p>
+
+            <div class="login-buttons">
+                <h3>Access Portals:</h3>
+                <button class="btn-student">Student Login</button>
+                <button class="btn-faculty">Faculty Login</button>
+            </div>
+        </div>
+
+        <div class="registration-section">
+            <div class="header">
+                <h1>New Student Registration</h1>
+                <p>Fill out the form below to begin your journey.</p>
+            </div>
+
+            <form action="thank.html" method="GET">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="yourname@vitap.ac.in" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="10-digit mobile number" pattern="[0-9]{10}" title="Ten digits phone number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Create Password</label>
+                    <input type="password" id="password" name="password" placeholder="Minimum 8 characters" minlength="8" required>
+                </div>
+                
+                <button type="submit" class="btn-register">SUBMIT REGISTRATION</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

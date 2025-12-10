@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Successful - VIT-AP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS for Styling */
+        :root {
+            --vit-red: #D2262E;
+            --vit-blue: #2C3E50;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            /* Same branded background as the registration page */
+            background: linear-gradient(135deg, var(--vit-blue) 0%, var(--vit-red) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .confirmation-box {
+            background-color: white;
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            max-width: 600px;
+            width: 90%;
+            animation: bounceIn 1s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        .icon {
+            color: #4CAF50; /* Standard success green */
+            font-size: 60px;
+            margin-bottom: 20px;
+            line-height: 1;
+        }
+
+        h1 {
+            color: var(--vit-blue);
+            margin-bottom: 15px;
+            font-size: 2.5em;
+        }
+
+        p {
+            color: #555;
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .btn-home {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--vit-red);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 700;
+            transition: background-color 0.3s;
+        }
+
+        .btn-home:hover {
+            background-color: #a81c22;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="confirmation-box">
+        <div class="icon">&#10003;</div>
+        <h1>Registration Successful!</h1>
+        <p>
+            Thank you for registering with **VIT-AP University**. Your application is being processed. 
+            An email with further instructions and login credentials will be sent to your provided email address shortly.
+        </p>
+        <a href="index1.html" class="btn-home">Go to Login Page</a>
+    </div>
+
+</body>
+</html>
