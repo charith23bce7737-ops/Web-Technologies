@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag & Drop Task Manager</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f4; padding: 20px; }
+        .input-group { margin-bottom: 20px; text-align: center; }
+        input { padding: 8px; width: 250px; }
+        button { padding: 8px 15px; cursor: pointer; }
+        
+        .board { display: flex; gap: 20px; justify-content: center; }
+        .column { 
+            background: #eee; border-radius: 5px; width: 250px; 
+            min-height: 400px; padding: 10px; display: flex; flex-direction: column;
+        }
+        .column h3 { text-align: center; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
+        
+        .task-card { 
+            background: white; padding: 10px; margin: 10px 0; 
+            border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            cursor: grab; 
+        }
+        .task-card p { margin: 5px 0; font-size: 0.9em; color: #666; }
+        .completed-task { background: #d4edda !important; border: 1px solid #c3e6cb; }
+    </style>
+</head>
+<body>
+
+    <div class="input-group">
+        <input type="text" id="taskInput" placeholder="Enter task name...">
+        <button onclick="addTask()">Add Task</button>
+    </div>
+
+    <div class="board">
+        <div class="column" id="todo" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h3>To Do</h3>
+        </div>
+        <div class="column" id="inprogress" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h3>In Progress</h3>
+        </div>
+        <div class="column" id="completed" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h3>Completed</h3>
+        </div>
+    </div>
+
+    <script>
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            const data = ev.dataTransfer.getData("text");
+            const draggedElement = document.getElementById(data);
+            const dropzone = ev.target.closest('.column');
+            
+            if (dropzone) {
+                dropzone.appendChild(draggedElement);
+                
+                if (dropzone.id === 'completed') {
+                    draggedElement.classList.add('completed-task');
+                    alert("Task Completed Successfully");
+                } else {
+                    draggedElement.classList.remove('completed-task');
+                }
+            }
+        }
+
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            if (input.value.trim() === "") return;
+
+            const taskId = "task-" + Date.now();
+            const date = new Date().toLocaleDateString();
+
+            const card = document.createElement('div');
+            card.className = 'task-card';
+            card.id = taskId;
+            card.draggable = true;
+            card.ondragstart = drag;
+
+            card.innerHTML = `
+                <strong>${input.value}</strong>
+                <p>Created: ${date}</p>
+            `;
+
+            document.getElementById('todo').appendChild(card);
+            input.value = "";
+        }
+    </script>
+
+</body>
+</html>
