@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Adaptive Registration Form</title>
+  <style>
+    .error {
+      border: 2px solid red;
+    }
+    .hidden {
+      display: none;
+    }
+    .message {
+      color: red;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Registration Form</h2>
+
+<form id="registrationForm" novalidate>
+  <label>Name:</label><br>
+  <input type="text" id="name"><br><br>
+
+  <label>Email:</label><br>
+  <input type="email" id="email">
+  <div id="emailMsg" class="message"></div><br>
+
+  <label>Password:</label><br>
+  <input type="password" id="password">
+  <div id="passwordMsg" class="message"></div><br>
+
+  <label>Confirm Password:</label><br>
+  <input type="password" id="confirmPassword"><br><br>
+
+  <label>Age:</label><br>
+  <input type="number" id="age"><br><br>
+
+  <label>Role:</label><br>
+  <select id="role">
+    <option value="">Select Role</option>
+    <option value="student">Student</option>
+    <option value="teacher">Teacher</option>
+    <option value="admin">Admin</option>
+  </select><br><br>
+
+  <div id="skillsSection" class="hidden">
+    <label>Skills (comma-separated):</label><br>
+    <input type="text" id="skills"><br><br>
+  </div>
+
+  <button type="submit">Register</button>
+</form>
+
+<script>
+const form = document.getElementById("registrationForm");
+const roleSelect = document.getElementById("role");
+const skillsSection = document.getElementById("skillsSection");
+
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const confirmPasswordInput = document.getElementById("confirmPassword");
+const ageInput = document.getElementById("age");
+
+function showError(input, condition) {
+  input.classList.toggle("error", condition);
+}
+
+function validateEmail(role) {
+  const email = emailInput.value;
+  const adminDomain = "@company.com";
+
+  if (role === "admin" && !email.endsWith(adminDomain)) {
+    emailMsg.textContent = "Admin email must end with @company.com";
+    return false;
+  }
+  emailMsg.textContent = "";
+  return true;
+}
+
+function validatePassword(role) {
+  const password = passwordInput.value;
+  let strongPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+  if (role === "admin" && !strongPattern.test(password)) {
+    passwordMsg.textContent =
+      "Admin password must be 8+ chars, include uppercase, number & symbol";
+    return false;
+  }
+  passwordMsg.textContent = "";
+  return true;
+}
+
+function validateAge(role) {
+  const age = parseInt(ageInput.value);
+  if (
+    (role === "student" && age < 16) ||
+    (role === "teacher" && age < 21) ||
+    (role === "admin" && age < 25)
+  ) {
+    return false;
+  }
+  return true;
+}
+
+function validatePasswordsMatch() {
+  return passwordInput.value === confirmPasswordInput.value;
+}
+
+roleSelect.addEventListener("change", () => {
+  const role = roleSelect.value;
+  skillsSection.classList.toggle("hidden", role !== "teacher");
+});
+
+form.addEventListener("input", () => {
+  const role = roleSelect.value;
+
+  showError(emailInput, !validateEmail(role));
+  showError(passwordInput, !validatePassword(role));
+  showError(confirmPasswordInput, !validatePasswordsMatch());
+  showError(ageInput, !validateAge(role));
+});
+
+form.addEventListener("submit", (e) => {
+  const role = roleSelect.value;
+
+  const valid =
+    validateEmail(role) &&
+    validatePassword(role) &&
+    validatePasswordsMatch() &&
+    validateAge(role);
+
+  if (!valid) {
+    e.preventDefault();
+    alert("Please fix validation errors before submitting.");
+  } else {
+    alert("Registration Successful!");
+  }
+});
+</script>
+
+</body>
+</html>

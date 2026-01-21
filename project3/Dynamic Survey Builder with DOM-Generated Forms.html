@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dynamic Survey Builder</title>
+<style>
+  .error { color: red; font-size: 0.9em; }
+  .invalid { border: 2px solid red; }
+</style>
+</head>
+<body>
+
+<h2>Survey</h2>
+<form id="surveyForm"></form>
+<button onclick="submitSurvey()">Submit</button>
+
+<script>
+const questions = [
+  {
+    id: "q1",
+    label: "What is your name?",
+    type: "text",
+    required: true,
+    maxLength: 20
+  },
+  {
+    id: "q2",
+    label: "Gender",
+    type: "radio",
+    required: true,
+    options: ["Male", "Female", "Other"]
+  },
+  {
+    id: "q3",
+    label: "Skills",
+    type: "checkbox",
+    required: true,
+    options: ["JavaScript", "Python", "Java"],
+    minSelect: 1,
+    maxSelect: 2
+  }
+];
+
+const form = document.getElementById("surveyForm");
+
+function generateForm() {
+  questions.forEach(q => {
+    const container = document.createElement("div");
+    container.id = q.id;
+
+    const label = document.createElement("label");
+    label.textContent = q.label;
+    container.appendChild(label);
+    container.appendChild(document.createElement("br"));
+
+    if (q.type === "text") {
+      const input = document.createElement("input");
+      input.type = "text";
+      input.maxLength = q.maxLength;
+      container.appendChild(input);
+    }
+
+    if (q.type === "radio" || q.type === "checkbox") {
+      q.options.forEach(opt => {
+        const input = document.createElement("input");
+        input.type = q.type;
+        input.name = q.id;
+        input.value = opt;
+
+        container.appendChild(input);
+        container.appendChild(document.createTextNode(opt));
+        container.appendChild(document.createElement("br"));
+      });
+    }
+
+    const error = document.createElement("div");
+    error.className = "error";
+    container.appendChild(error);
+
+    form.appendChild(container);
+    form.appendChild(document.createElement("br"));
+  });
+}
+
+function validateQuestion(q) {
+  const container = document.getElementById(q.id);
+  const error = container.querySelector(".error");
+  error.textContent = "";
+
+  if (q.type === "text") {
+    const input = container.querySelector("input");
+    input.classList.remove("invalid");
+
+    if (q.required && input.value.trim() === "") {
+      error.textContent = "This field is required";
+      input.classList.add("invalid");
+      return false;
+    }
+
+    if (input.value.length > q.maxLength) {
+      error.textContent = `Maximum ${q.maxLength} characters allowed`;
+      input.classList.add("invalid");
+      return false;
+    }
+  }
+
+  if (q.type === "radio") {
+    const checked = container.querySelector("input:checked");
+    if (!checked && q.required) {
+      error.textContent = "Please select an option";
+      return false;
+    }
+  }
+
+  if (q.type === "checkbox") {
+    const checked = container.querySelectorAll("input:checked").length;
+
+    if (q.required && checked < q.minSelect) {
+      error.textContent = `Select at least ${q.minSelect}`;
+      return false;
+    }
+
+    if (checked > q.maxSelect) {
+      error.textContent = `Select no more than ${q.maxSelect}`;
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function submitSurvey() {
+  let valid = true;
+  questions.forEach(q => {
+    if (!validateQuestion(q)) valid = false;
+  });
+
+  if (!valid) return;
+  alert("Survey submitted successfully!");
+}
+
+generateForm();
+</script>
+
+</body>
+</html>
