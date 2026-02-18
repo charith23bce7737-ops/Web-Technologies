@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Username Checker</title>
+    <style>
+        .loader { display: none; width: 15px; height: 15px; border: 2px solid #f3f3f3; border-top: 2px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <h2>User Registration</h2>
+    <form id="regForm">
+        <label>Username:</label>
+        <input type="text" id="username" autocomplete="off">
+        <div id="loader" class="loader"></div>
+        <span id="feedback"></span><br><br>
+        <button type="submit" id="submitBtn">Register</button>
+    </form>
+
+    <script>
+        const input = document.getElementById('username');
+        const feedback = document.getElementById('feedback');
+        const loader = document.getElementById('loader');
+        const btn = document.getElementById('submitBtn');
+        let isAvailable = false;
+
+        input.addEventListener('input', async () => {
+            const name = input.value.trim();
+            if(!name) { feedback.textContent = ""; return; }
+
+            loader.style.display = "inline-block";
+            feedback.textContent = "";
+
+            try {
+                // Simulating fetch('users.json')
+                const data = { "taken": ["admin", "user1", "test"] };
+                
+                // Simulate network delay
+                setTimeout(() => {
+                    loader.style.display = "none";
+                    if (data.taken.includes(name.toLowerCase())) {
+                        feedback.textContent = "Username already taken";
+                        feedback.style.color = "red";
+                        isAvailable = false;
+                    } else {
+                        feedback.textContent = "Username available";
+                        feedback.style.color = "green";
+                        isAvailable = true;
+                    }
+                }, 500);
+            } catch (e) { feedback.textContent = "Error connecting..."; }
+        });
+
+        document.getElementById('regForm').onsubmit = (e) => {
+            if(!isAvailable) {
+                e.preventDefault();
+                alert("Please choose a valid username first!");
+            }
+        };
+    </script>
+</body>
+</html>

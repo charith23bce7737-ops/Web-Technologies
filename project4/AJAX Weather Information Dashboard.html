@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head><title>Weather Dashboard</title></head>
+<body>
+    <h2>Weather Dashboard</h2>
+    <input type="text" id="city" placeholder="Enter City Name">
+    <button onclick="getWeather()">Get Weather</button>
+    <div id="loader" style="display:none;">Loading...</div>
+    <div id="weatherInfo" style="margin-top: 20px;"></div>
+
+    <script>
+        const cache = {};
+
+        async function getWeather() {
+            const city = document.getElementById('city').value.trim();
+            const info = document.getElementById('weatherInfo');
+            const loader = document.getElementById('loader');
+
+            if(!city) return;
+            if(cache[city]) { render(cache[city]); return; }
+
+            loader.style.display = "block";
+            info.innerHTML = "";
+
+            try {
+                // Replace YOUR_KEY with a real OpenWeather API key
+                const API_KEY = 'YOUR_API_KEY_HERE';
+                const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`);
+                
+                if(!res.ok) throw new Error("City not found");
+                
+                const data = await res.json();
+                cache[city] = data; // Cache the result
+                render(data);
+            } catch (err) {
+                info.innerHTML = `<p style="color:red">${err.message}</p>`;
+            } finally {
+                loader.style.display = "none";
+            }
+        }
+
+        function render(data) {
+            document.getElementById('weatherInfo').innerHTML = `
+                <h3>${data.name}</h3>
+                <p>Temp: ${data.main.temp}°C</p>
+                <p>Humidity: ${data.main.humidity}%</p>
+                <p>Condition: ${data.weather[0].description}</p>
+            `;
+        }
+    </script>
+</body>
+</html>

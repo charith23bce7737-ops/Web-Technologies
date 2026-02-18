@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head><title>Product Search</title></head>
+<body>
+    <h2>Live Product Search</h2>
+    <input type="text" id="searchBox" placeholder="Type to search products...">
+    <div id="results" style="margin-top: 20px;"></div>
+
+    <script>
+        let debounceTimer;
+        const products = [
+            { name: "iPhone 15", price: 999, category: "Mobile" },
+            { name: "Samsung S24", price: 899, category: "Mobile" },
+            { name: "MacBook Pro", price: 1999, category: "Laptop" }
+        ];
+
+        document.getElementById('searchBox').addEventListener('input', (e) => {
+            clearTimeout(debounceTimer);
+            const query = e.target.value.toLowerCase();
+            const resultsDiv = document.getElementById('results');
+
+            if (!query) { resultsDiv.innerHTML = ""; return; }
+
+            resultsDiv.innerHTML = "Searching...";
+
+            debounceTimer = setTimeout(() => {
+                const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+                
+                if (filtered.length > 0) {
+                    resultsDiv.innerHTML = filtered.map(p => `
+                        <div style="border-bottom: 1px solid #ccc; padding: 5px;">
+                            <strong>${p.name}</strong> - $${p.price} (${p.category})
+                        </div>
+                    `).join('');
+                } else {
+                    resultsDiv.innerHTML = "No results found.";
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>
