@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Product Inventory</title>
+<style>
+body{font-family:Arial}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #000;padding:8px;text-align:center}
+.low{background-color:pink}
+</style>
+</head>
+<body>
+
+<h2>Product Inventory System</h2>
+<p>Total Inventory Value: ₹<span id="total"></span></p>
+
+<input id="search" placeholder="Search Category">
+<button onclick="searchCategory()">Search</button>
+
+<table id="inventoryTable"></table>
+
+<h3>Add Product</h3>
+<input id="pid" placeholder="ID">
+<input id="pname" placeholder="Name">
+<input id="category" placeholder="Category">
+<input id="price" placeholder="Price">
+<input id="stock" placeholder="Stock">
+<button onclick="addProduct()">Add</button>
+
+<script>
+let products=[
+{id:1,name:"Laptop",category:"Electronics",price:50000,stock:5},
+{id:2,name:"Pen",category:"Stationery",price:10,stock:200}
+];
+
+function displayProducts(data=products){
+let table=document.getElementById("inventoryTable");
+table.innerHTML=`<tr>
+<th>ID</th><th>Name</th><th>Category</th>
+<th>Price</th><th>Stock</th><th>Actions</th>
+</tr>`;
+let total=0;
+data.forEach(p=>{
+total+=p.price*p.stock;
+table.innerHTML+=`<tr class="${p.stock<10?'low':''}">
+<td>${p.id}</td><td>${p.name}</td><td>${p.category}</td>
+<td>${p.price}</td><td>${p.stock}</td>
+<td>
+<button onclick="editProduct(${p.id})">Edit</button>
+<button onclick="deleteProduct(${p.id})">Delete</button>
+</td>
+</tr>`;
+});
+document.getElementById("total").innerText=total;
+}
+
+function addProduct(){
+let id=parseInt(pid.value);
+let name=pname.value;
+let categoryVal=category.value;
+let price=parseFloat(price.value);
+let stock=parseInt(stock.value);
+
+if(!id||!name||!categoryVal||isNaN(price)||isNaN(stock)){
+alert("Invalid Data");return;
+}
+
+products.push({id,name,category:categoryVal,price,stock});
+displayProducts();
+}
+
+function editProduct(id){
+let product=products.find(p=>p.id===id);
+let newStock=prompt("Enter new stock:",product.stock);
+if(!isNaN(newStock)) product.stock=parseInt(newStock);
+displayProducts();
+}
+
+function deleteProduct(id){
+products=products.filter(p=>p.id!==id);
+displayProducts();
+}
+
+function searchCategory(){
+let keyword=document.getElementById("search").value.toLowerCase();
+let filtered=products.filter(p=>p.category.toLowerCase().includes(keyword));
+displayProducts(filtered);
+}
+
+displayProducts();
+</script>
+</body>
+</html>

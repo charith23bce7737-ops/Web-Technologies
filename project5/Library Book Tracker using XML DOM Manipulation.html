@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Library Book Tracker</title>
+<style>
+body{font-family:Arial}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #000;padding:8px;text-align:center}
+</style>
+</head>
+<body>
+
+<h2>Library Book Tracker (XML DOM)</h2>
+
+<table id="bookTable">
+<thead>
+<tr>
+<th>ID</th><th>Title</th><th>Author</th><th>Status</th><th>Actions</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+<h3>Add / Update Book</h3>
+<input id="id" placeholder="ID">
+<input id="title" placeholder="Title">
+<input id="author" placeholder="Author">
+<select id="status">
+<option>Available</option>
+<option>Issued</option>
+</select>
+<button onclick="addBook()">Add</button>
+
+<script>
+let parser = new DOMParser();
+let xmlString = `
+<library>
+<book><id>1</id><title>Clean Code</title><author>Robert</author><availability>Available</availability></book>
+<book><id>2</id><title>JavaScript Guide</title><author>David</author><availability>Issued</availability></book>
+</library>`;
+let xmlDoc = parser.parseFromString(xmlString,"text/xml");
+
+function displayBooks(){
+let tbody=document.querySelector("#bookTable tbody");
+tbody.innerHTML="";
+let books=xmlDoc.getElementsByTagName("book");
+for(let i=0;i<books.length;i++){
+let id=books[i].getElementsByTagName("id")[0].textContent;
+let title=books[i].getElementsByTagName("title")[0].textContent;
+let author=books[i].getElementsByTagName("author")[0].textContent;
+let status=books[i].getElementsByTagName("availability")[0].textContent;
+tbody.innerHTML+=`<tr>
+<td>${id}</td><td>${title}</td><td>${author}</td><td>${status}</td>
+<td>
+<button onclick="toggleStatus(${id})">Toggle</button>
+<button onclick="deleteBook(${id})">Delete</button>
+</td>
+</tr>`;
+}
+}
+
+function addBook(){
+let id=document.getElementById("id").value.trim();
+let title=document.getElementById("title").value.trim();
+let author=document.getElementById("author").value.trim();
+let status=document.getElementById("status").value;
+
+if(!id||!title||!author){alert("All fields required");return;}
+
+let book=xmlDoc.createElement("book");
+["id","title","author","availability"].forEach((tag,i)=>{
+let el=xmlDoc.createElement(tag);
+el.textContent=[id,title,author,status][i];
+book.appendChild(el);
+});
+xmlDoc.documentElement.appendChild(book);
+displayBooks();
+}
+
+function toggleStatus(id){
+let books=xmlDoc.getElementsByTagName("book");
+for(let book of books){
+if(book.getElementsByTagName("id")[0].textContent==id){
+let statusNode=book.getElementsByTagName("availability")[0];
+statusNode.textContent=statusNode.textContent==="Available"?"Issued":"Available";
+}
+}
+displayBooks();
+}
+
+function deleteBook(id){
+let books=xmlDoc.getElementsByTagName("book");
+for(let book of books){
+if(book.getElementsByTagName("id")[0].textContent==id){
+xmlDoc.documentElement.removeChild(book);
+break;
+}
+}
+displayBooks();
+}
+
+displayBooks();
+</script>
+</body>
+</html>

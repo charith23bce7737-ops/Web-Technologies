@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student JSON CRUD</title>
+</head>
+<body>
+    <h2>Student Records (JSON)</h2>
+    <form id="studentForm">
+        <input type="text" id="sId" placeholder="ID" required>
+        <input type="text" id="sName" placeholder="Name" required>
+        <input type="text" id="sCourse" placeholder="Course">
+        <input type="number" id="sMarks" placeholder="Marks">
+        <button type="submit">Save Student</button>
+    </form>
+
+    <table border="1" id="studentTable" style="margin-top:20px; width:100%">
+        <thead><tr><th>ID</th><th>Name</th><th>Course</th><th>Marks</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        let students = [];
+
+        async function fetchStudents() {
+            try {
+                // In a real scenario: const res = await fetch('students.json');
+                // Simulating response:
+                students = [
+                    {id: "1", name: "John", course: "CS", marks: 85},
+                    {id: "2", name: "Jane", course: "Math", marks: 92}
+                ];
+                render();
+            } catch (e) { console.error("JSON Parse Error"); }
+        }
+
+        function render() {
+            const tbody = document.querySelector("#studentTable tbody");
+            tbody.innerHTML = students.map((s, index) => `
+                <tr>
+                    <td>${s.id}</td>
+                    <td>${s.name}</td>
+                    <td>${s.course}</td>
+                    <td>${s.marks}</td>
+                    <td>
+                        <button onclick="editStudent(${index})">Edit Marks</button>
+                        <button onclick="deleteStudent(${index})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        document.getElementById('studentForm').onsubmit = (e) => {
+            e.preventDefault();
+            const newStudent = {
+                id: document.getElementById('sId').value,
+                name: document.getElementById('sName').value,
+                course: document.getElementById('sCourse').value,
+                marks: document.getElementById('sMarks').value
+            };
+            students.push(newStudent);
+            render();
+            e.target.reset();
+        };
+
+        function deleteStudent(index) {
+            students.splice(index, 1);
+            render();
+        }
+
+        function editStudent(index) {
+            const newMarks = prompt("Enter new marks:", students[index].marks);
+            if(newMarks) {
+                students[index].marks = newMarks;
+                render();
+            }
+        }
+
+        window.onload = fetchStudents;
+    </script>
+</body>
+</html>

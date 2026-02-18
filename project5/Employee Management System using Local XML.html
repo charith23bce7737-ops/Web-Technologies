@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee XML CRUD</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .success { color: green; } .error { color: red; }
+    </style>
+</head>
+<body>
+    <h2>Employee Management (XML)</h2>
+    <div id="msg"></div>
+    <input type="text" id="empId" placeholder="ID">
+    <input type="text" id="empName" placeholder="Name">
+    <input type="text" id="empDept" placeholder="Dept">
+    <input type="number" id="empSalary" placeholder="Salary">
+    <button onclick="addEmployee()">Add Employee</button>
+
+    <table id="empTable">
+        <thead><tr><th>ID</th><th>Name</th><th>Dept</th><th>Salary</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        let xmlDoc;
+
+        // Load XML (Simulated initial fetch)
+        async function init() {
+            const xmlData = `<?xml version="1.0" encoding="UTF-8"?>
+                <employees>
+                    <employee><id>101</id><name>Alice</name><dept>IT</dept><salary>5000</salary></employee>
+                </employees>`;
+            const parser = new DOMParser();
+            xmlDoc = parser.parseFromString(xmlData, "text/xml");
+            renderTable();
+        }
+
+        function renderTable() {
+            const tbody = document.querySelector("#empTable tbody");
+            tbody.innerHTML = "";
+            const emps = xmlDoc.getElementsByTagName("employee");
+            
+            for (let emp of emps) {
+                const id = emp.getElementsByTagName("id")[0].textContent;
+                const name = emp.getElementsByTagName("name")[0].textContent;
+                const dept = emp.getElementsByTagName("dept")[0].textContent;
+                const salary = emp.getElementsByTagName("salary")[0].textContent;
+
+                tbody.innerHTML += `<tr>
+                    <td>${id}</td><td>${name}</td><td>${dept}</td><td>${salary}</td>
+                    <td><button onclick="deleteEmp('${id}')">Delete</button></td>
+                </tr>`;
+            }
+        }
+
+        function addEmployee() {
+            const id = document.getElementById('empId').value;
+            const name = document.getElementById('empName').value;
+            const dept = document.getElementById('empDept').value;
+            const salary = document.getElementById('empSalary').value;
+
+            if(!id || !name) return alert("Fields cannot be empty");
+
+            const newEmp = xmlDoc.createElement("employee");
+            newEmp.innerHTML = `<id>${id}</id><name>${name}</name><dept>${dept}</dept><salary>${salary}</salary>`;
+            xmlDoc.documentElement.appendChild(newEmp);
+            renderTable();
+            document.getElementById('msg').innerHTML = "<p class='success'>Added successfully!</p>";
+        }
+
+        function deleteEmp(id) {
+            const emps = xmlDoc.getElementsByTagName("employee");
+            for (let i = 0; i < emps.length; i++) {
+                if (emps[i].getElementsByTagName("id")[0].textContent === id) {
+                    xmlDoc.documentElement.removeChild(emps[i]);
+                    break;
+                }
+            }
+            renderTable();
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
