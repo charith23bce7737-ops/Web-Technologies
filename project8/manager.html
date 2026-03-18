@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Manager</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            margin-top: 20px;
+        }
+        input {
+            margin: 5px;
+            padding: 8px;
+        }
+        button {
+            padding: 8px 12px;
+            margin: 5px;
+        }
+        table {
+            margin: auto;
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 80%;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Student Manager</h2>
+
+<input type="number" id="id" placeholder="ID">
+<input type="text" id="name" placeholder="Name">
+<input type="text" id="dept" placeholder="Department">
+<input type="number" id="marks" placeholder="Marks"><br>
+
+<button onclick="addStudent()">Add Student</button>
+<button onclick="updateStudent()">Update Student</button>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Marks</th>
+            <th>Grade</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+</table>
+
+<script>
+let students = [];
+let editIndex = -1;
+
+const getGrade = (marks) =>
+    marks >= 90 ? "A" :
+    marks >= 75 ? "B" :
+    marks >= 60 ? "C" : "D";
+
+const displayStudents = () => {
+    const tableBody = document.getElementById("tableBody");
+    tableBody.innerHTML = "";
+
+    students.forEach((s, index) => {
+        tableBody.innerHTML += `
+        <tr>
+            <td>${s.id}</td>
+            <td>${s.name}</td>
+            <td>${s.department}</td>
+            <td>${s.marks}</td>
+            <td>${s.grade}</td>
+            <td>
+                <button onclick="editStudent(${index})">Edit</button>
+            </td>
+        </tr>`;
+    });
+};
+
+const addStudent = () => {
+    const id = document.getElementById("id").value;
+    const name = document.getElementById("name").value;
+    const department = document.getElementById("dept").value;
+    const marks = Number(document.getElementById("marks").value);
+
+    const student = {
+        id,
+        name,
+        department,
+        marks,
+        grade: getGrade(marks)
+    };
+
+    students.push(student);
+    displayStudents();
+};
+
+const editStudent = (index) => {
+    const s = students[index];
+
+    document.getElementById("id").value = s.id;
+    document.getElementById("name").value = s.name;
+    document.getElementById("dept").value = s.department;
+    document.getElementById("marks").value = s.marks;
+
+    editIndex = index;
+};
+
+const updateStudent = () => {
+    const id = document.getElementById("id").value;
+    const name = document.getElementById("name").value;
+    const department = document.getElementById("dept").value;
+    const marks = Number(document.getElementById("marks").value);
+
+    students[editIndex] = {
+        id,
+        name,
+        department,
+        marks,
+        grade: getGrade(marks)
+    };
+
+    editIndex = -1;
+    displayStudents();
+};
+</script>
+
+</body>
+</html>

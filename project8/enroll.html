@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course Enrollment</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            margin-top: 40px;
+        }
+        .card {
+            width: 350px;
+            margin: auto;
+            padding: 20px;
+            box-shadow: 0 0 10px #ccc;
+            border-radius: 10px;
+        }
+        input {
+            margin: 5px;
+            padding: 8px;
+            width: 80%;
+        }
+        button {
+            padding: 10px 15px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Course Enrollment</h2>
+
+    <input type="text" id="courseName" placeholder="Course Name"><br>
+    <input type="text" id="instructor" placeholder="Instructor Name"><br>
+
+    <button onclick="createCourse()">Create Course</button>
+    <button onclick="enroll()">Enroll</button>
+
+    <p id="course"></p>
+    <p id="result"></p>
+</div>
+
+<script>
+class Course {
+    constructor(courseName, instructor) {
+        this.courseName = courseName;
+        this.instructor = instructor;
+    }
+
+    displayCourse() {
+        return `Course: ${this.courseName}, Instructor: ${this.instructor}`;
+    }
+}
+
+let course1;
+
+const createCourse = () => {
+    const courseName = document.getElementById("courseName").value;
+    const instructor = document.getElementById("instructor").value;
+
+    course1 = new Course(courseName, instructor);
+
+    document.getElementById("course").innerHTML = course1.displayCourse();
+};
+
+const enroll = () => {
+    let enrollCourse = new Promise((resolve, reject) => {
+        let seatsAvailable = true;
+        if (seatsAvailable)
+            resolve("Enrollment Successful");
+        else
+            reject("Course Full");
+    });
+
+    enrollCourse
+        .then(msg => document.getElementById("result").innerHTML = msg)
+        .catch(err => document.getElementById("result").innerHTML = err);
+};
+</script>
+
+</body>
+</html>
